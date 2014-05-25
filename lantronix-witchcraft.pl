@@ -33,11 +33,12 @@ my $result = GetOptions (
 	"G|getsetup" => \$config{'getsetup'},
 	"P|getpass" => \$config{'getpass'},
 	"R|resetpass" => \$config{'resetpass'},
+	"C|rcr" => \$config{'rcr'},
 	"E|resetenh" => \$config{'resetenh'},
 	"F|setpass=s" => \$config{'setpass'},
 	"S|resetsecurity" => \$config{'resetsecurity'},
 	"Y|dry" => \$config{'dry'},
-
+	"b|broadcast" => \$config{'broadcast'},
 	"t|time" => \$config{'timestamp'},
 	"I|ipfile=s" => \$config{'ipfile'},
 	"i|ip=s" => \$config{'ip'},
@@ -92,11 +93,22 @@ foreach my $ip (@iplist) {
 	my $configrec;
 	print STDERR "[i] $ip - performing\n" if ($config{'verbose'}>0);
 
+	if ($config{'rcr'}) {
+		my $resp=send_udp($ip,"\x00\x00\x00\xF4",32);
+		warn ("invalid length received: ".length($resp)." : ".hexify($resp)) if (length($resp)!=32); 
+		#my @bytes=unpack("C*",$resp);
+		my $ver=substr($resp,16,16);
+		my $verstr=unpack "Z*", $ver;
+		print "Version: $verstr\n";
+	}
+
 	if ($config{'query'}) {
 		my $resp=send_udp($ip,"\x00\x00\x00\xF6",30);
 		warn ("invalid length received: ".length($resp)." : ".hexify($resp)) if (length($resp)!=30); 
 		#my @bytes=unpack("C*",$resp);
-		print "Got: ".hexify($resp)."\n";
+		my $type=substr($resp,8,3);
+		my $mac=substr($resp,24,6);
+		print "Type: $type with Mac: ".hexify($mac)."\n";
 	}
 
 	if ($config{'getpass'} or $config{'resetpass'} or $config{'setpass'}) {
@@ -208,10 +220,10 @@ sub send_udp {
 	print STDERR "[v] Connecting to $ip:$port\n" if ($config{'verbose'}>6);
 	my $socket = IO::Socket::INET->new( PeerPort  => $port,
 					 PeerAddr  => $ip,
-					 Timeout => 60,
+					 Timeout => 90,
 					 Type      => SOCK_DGRAM,
+					 Broadcast => $config{'broadcast'},
 					 Proto     => 'udp');
-
 	print STDERR "[v] Sending ".length($content)." bytes: \n".hexdump($content)."\n" if ($config{'verbose'}>8);
 	if ($config{'dumplog'}) {
 		my $fn="dump-$ip-$port-".getstampstr()."-$spktcount-$srand-req.bin";
