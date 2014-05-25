@@ -122,11 +122,18 @@ foreach my $ip (@iplist) {
 		$configrec=$resp;
 		# my @bytes=unpack("C*",$resp);
 		my $pass=substr $resp,12,4;
+		my $ipaddr=substr $resp,4,4;
+		my $subnet=substr $resp,10,1;
+		my $gateway=substr $resp,16,4;
+		#my $ripaddr=substr $resp,28,4;
 		if ($pass eq "\x00\x00\x00\x00") {
 			print "$ip: password is not set\n";
 		} else {
 			print "$ip: Password is: ".un2printable($pass)." (".hexify($pass).")\n";
 		}
+		print "$ip: IP is: ".char2ip($ipaddr)." (".hexify($ipaddr).") with subnet ".hexify($subnet)."\n";
+		#print "$ip: Remote IP is: ".char2ip($ripaddr)." (".hexify($ripaddr).")\n";
+		print "$ip: Gateway is: ".char2ip($gateway)." (".hexify($gateway).")\n";
 	}
 
 	if ($config{'getsetup'}) {
@@ -305,6 +312,13 @@ sub un2printable {
 	my ($parm) = @_;
 	$parm =~ s/.*[^[:print:]]+/./;	
 	return $parm;
+}
+
+sub char2ip {
+	my ($parm) = @_;
+	my @ipnums=unpack("C4",$parm);
+	my $ret = join ('.',@ipnums);	
+	return $ret;	
 }
 
 sub getstampstr {
