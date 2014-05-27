@@ -276,7 +276,31 @@ sub ctrlc {
 }
 
 sub help {
-	# TODO	
+	print "Lantronix Witchcraft. Copyright (C) Kost. Distributed under GPL.\n\n";
+	print "Usage: $0 [options] <ip> \n";
+	print "\n";
+	print " -Q	query device (MAC address and type)\n";
+	print " -G	get setup records (try all records)\n";
+	print " -P	get simple password\n";
+	print " -R	reset simple password to null (password will be disabled)\n";
+	print " -C	query device for version (password leak sometimes)\n";
+	print " -E	reset security record (includes enhanced password and AES)\n";
+	print " -S	reset security record (includes enhanced password but not AES)\n";
+	print " -F <s>	set simple password to <s>\n";
+	print " -i <s>	connect to IP <s> \n";
+	print " -I <s>	use IP addresses from file <s> (IP address per line)\n";
+	print " -Y	dry run (don't send any packets)\n";
+	print " -b	send broadcast packet\n";
+	print " -t	add timestamp\n";
+	print " -p <i>	use port <i> (default: $config{'port'})\n";
+	print " -v	verbose (-vvvvv will be more verbose)\n";
+	print " -h	this help\n";
+	print "\n";
+
+	print "Example: $0 -Q -C 127.0.0.1\n";
+	print "Example: $0 -P -E 127.0.0.1\n";
+	
+	exit 0;
 }
 
 sub hexdump {
