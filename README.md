@@ -28,9 +28,9 @@ Options
  -h	this help
 ```
 
-Example: 
+Example (query configuration): 
     ./lantronix-witchcraft.pl -Q -C 127.0.0.1
-Example: 
-     ./lantronix-witchcraft.pl -P -E 127.0.0.1
+Example (get simple password and reset security block): 
+    ./lantronix-witchcraft.pl -P -E 127.0.0.1
 
 
