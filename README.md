@@ -9,6 +9,7 @@ Requirements
 
 Options
 ====================
+```
  -Q	query device (MAC address and type)
  -G	get setup records (try all records)
  -P	get simple password
@@ -25,6 +26,7 @@ Options
  -p <d>	use port <d> (default: 30718)
  -v	verbose (-vvvvv will be more verbose)
  -h	this help
+```
 
 Example: 
     ./lantronix-witchcraft.pl -Q -C 127.0.0.1
