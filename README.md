@@ -3,6 +3,10 @@ lantronix-witchcraft
 
 Perl utilities to retrieve and/or set basic and enhanced telnet passwords (amongst others)
 
+You can check more about the protocol and the problems here:
+
+http://www.slideshare.net/kost/vk-exploringtreasuresof77-fehlantronixconfidence2014
+
 Requirements
 ====================
 - Perl
